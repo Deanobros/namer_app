@@ -25,33 +25,103 @@ class MyApp extends StatelessWidget {
   }
 }
 
+class Dummy extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(child: Text("Dummy"));
+  }
+}
+
 class MyAppState extends ChangeNotifier {
   var current = WordPair.random();
   void getNext() {
     current = WordPair.random();
     notifyListeners();
+  } 
+  var favorites = <WordPair>[];
+
+  void toggleFavorite() {
+    if (favorites.contains(current)) {
+      favorites.remove(current);
+    } else {
+      favorites.add(current);
+    }
+    notifyListeners();
   }
 }
 
 class MyHomePage extends StatelessWidget {
+
+  final List<Widget> _tabs = [
+    GeneratorPage(),
+    Dummy()
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: _tabs.length,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("Home"),
+          bottom: TabBar(
+            tabs: [
+              Tab(  
+                icon: Icon(Icons.home),
+                text: 'Home'
+              ),
+              Tab(
+                icon: Icon(Icons.favorite),
+                text: 'Favorites',
+              )
+            ]
+          ),
+        ),
+        body: TabBarView(children: _tabs)
+      ),
+    );
+  }
+}
+
+
+class GeneratorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
     var pair = appState.current;
 
-    return Scaffold(
-      body: Column(
-        children: [
-          Text('A random Excellent idea:'),
-          BigCard(pair: pair),
+    IconData icon;
+    if (appState.favorites.contains(pair)) {
+      icon = Icons.favorite;
+    } else {
+      icon = Icons.favorite_border;
+    }
 
-          ElevatedButton(
-            onPressed:  ()  {
-              print(pair);
-              appState.getNext();
-            },
-            child: Text('Next'),
-          )
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          BigCard(pair: pair),
+          SizedBox(height: 10),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ElevatedButton.icon(
+                onPressed: () {
+                  appState.toggleFavorite();
+                },
+                icon: Icon(icon),
+                label: Text('Like'),
+              ),
+              SizedBox(width: 10),
+              ElevatedButton(
+                onPressed: () {
+                  appState.getNext();
+                },
+                child: Text('Next'),
+              ),
+            ],
+          ),
         ],
       ),
     );
