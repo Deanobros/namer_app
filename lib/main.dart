@@ -25,12 +25,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class Dummy extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(child: Text("Dummy"));
-  }
-}
+
 
 class MyAppState extends ChangeNotifier {
   var current = WordPair.random();
@@ -54,7 +49,9 @@ class MyHomePage extends StatelessWidget {
 
   final List<Widget> _tabs = [
     GeneratorPage(),
-    Dummy()
+    ClassPage(),
+    EventsPage(),
+    MapPage()
   ];
 
   @override
@@ -70,10 +67,19 @@ class MyHomePage extends StatelessWidget {
                 icon: Icon(Icons.home),
                 text: 'Home'
               ),
+               Tab(
+                icon: Icon(Icons.group),
+                text: 'Class'
+              ),
+               Tab(
+                icon: Icon(Icons.calendar_month),
+                text: 'Events'
+              ),
               Tab(
-                icon: Icon(Icons.favorite),
-                text: 'Favorites',
+                icon: Icon(Icons.map),
+                text: 'Map',
               )
+             
             ]
           ),
         ),
@@ -125,6 +131,27 @@ class GeneratorPage extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class ClassPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(child: Text('Class Page'));
+  }
+}
+
+class EventsPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(child: Text('Events Page'));
+  }
+}
+
+class MapPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(child: Text("Map Page"));
   }
 }
 
